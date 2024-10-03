@@ -1,0 +1,292 @@
+<div class="container mt-5">
+  @if(isFormView()){
+  <div class="card">
+    <div class="card-header">
+      <div class="row d-flex">
+        <div class="col-8">
+          <h3>Create/Update Property</h3>
+        </div>
+        <div style="text-align: right !important;" class="col-4">
+          <button class="btn btn-success" (click)="toggleView()">Go To List</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <form>
+        <div class="row mb-3">
+          <!-- <div class="col-md-6">
+            <label for="Site ID">Site ID</label>
+            <input type="text" placeholder="Enter Site ID" #siteID="ngModel" required minlength="4" class="form-control"
+              name="siteId" [(ngModel)]="siteDetailsForm.siteId">
+            @if(siteID.touched){
+            <div class="text-danger">
+              @if(siteID.errors?.['required']){
+              <span>This is Required</span>
+              }
+              @if(siteID.errors?.['minlength']){
+              <span>Minimum 4 Characters Required</span>
+              }
+            </div>
+            }
+          </div> -->
+          <div class="col-md-6">
+            <label for="Site ID">Site Title</label>
+            <input type="text" placeholder="Enter Site Title" #title="ngModel" required minlength="4"
+              class="form-control" name="siteTitle" [(ngModel)]="siteDetailsForm.siteTitle">
+            @if(title.touched){
+            <div class="text-danger">
+              @if(title.errors?.['required']){
+              <span>This is Required</span>
+              }
+              @if(title.errors?.['minlength']){
+              <span>Minimum 4 Characters Required</span>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="Site ID">Location</label>
+            <input type="text" placeholder="Enter Location" class="form-control" name="location"
+              [(ngModel)]="siteDetailsForm.location">
+          </div>
+          <div class="col-md-6">
+            <label for="Site ID">Property Type ID</label>
+            <select class="form-select" name="propertyTypeId" [(ngModel)]="siteDetailsForm.propertyTypeId">
+              <option [value]="">Select Property ID</option>
+              @for (item of propertyData$ | async; track $index) {
+              <option [value]="item.propertTypeId"> {{item.propertyType}}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="Site ID">City</label>
+            <input type="text" placeholder="Enter City" class="form-control" name="city"
+              [(ngModel)]="siteDetailsForm.city">
+          </div>
+          <div class="col-md-6">
+            <label for="Site ID">Pincode</label>
+            <input type="text" placeholder="Enter Pincode" class="form-control" name="pincode"
+              [(ngModel)]="siteDetailsForm.pincode">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="Site ID">State</label>
+            <input type="text" placeholder="Enter State" class="form-control" name="state"
+              [(ngModel)]="siteDetailsForm.state">
+          </div>
+          <div class="col-md-6">
+            <label for="Site ID">Total Properties</label>
+            <input type="text" placeholder="Enter Total Properties" class="form-control" name="totalProperties"
+              [(ngModel)]="siteDetailsForm.totalProperties">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="Site ID">Created Date</label>
+            <input type="date" placeholder="Enter Created Date" class="form-control" name="createdDate"
+              [(ngModel)]="siteDetailsForm.createdDate">
+          </div>
+          <div class="col-md-6">
+            <label for="Site ID">Updated Date</label>
+            <input type="date" placeholder="Enter Updated Date" class="form-control" name="lastUpdatedDate"
+              [(ngModel)]="siteDetailsForm.lastUpdatedDate">
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="card-footer">
+      <button *ngIf="siteDetailsForm.siteId == 0" class="btn btn-primary" (click)="onSiteSave()">Save</button>
+      <button *ngIf="siteDetailsForm.siteId != 0" class="btn btn-warning" (click)="onSiteUpdate()">Update</button>
+    </div>
+  </div>
+  }@else{
+  <div class="card">
+    <div class="card-header">
+      <div class="row d-flex">
+        <div class="col-8">
+          <h3>Site List</h3>
+        </div>
+        <div style="text-align: right !important;" class="col-4">
+          <button class="btn btn-success" (click)="toggleView()">Create New</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr class="text-center">
+            <th scope="col">#</th>
+            <th scope="col">Site Title</th>
+            <th scope="col">Location</th>
+            <th scope="col">City</th>
+            <th scope="col">State</th>
+            <th scope="col">Pincode</th>
+            <th scope="col">Total Properties</th>
+            <th scope="col">Created Date</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if(SiteGridData.length == 0){
+          <ng-container>
+            <tr>
+              <td colspan="7" class="text-center">
+                No Records found
+              </td>
+            </tr>
+          </ng-container>
+          } @else {
+          <ng-container>
+            @for (item of this.SiteGridData; track $index) {
+            <tr class="text-center">
+              <th scope="row">{{$index+1}}</th>
+              <td>{{item.siteTitle}}</td>
+              <td>{{item.location}}</td>
+              <td>{{item.city}}</td>
+              <td>{{item.state}}</td>
+              <td>{{item.pincode}}</td>
+              <td>{{item.totalProperties}}</td>
+              <td>{{item.createdDate}}</td>
+              <td>
+                <button class="btn btn-warning" (click)="onSiteEdit(item)">Edit</button>
+                <button style="margin: 5px;" class="btn btn-success" (click)="openModal(item)">Properties</button>
+                <button class="btn btn-danger" (click)="onSiteDelete(item)">Delete</button>
+              </td>
+            </tr>
+            }
+          </ng-container>
+          }
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+</div>
+
+<div class="modal" #PropertyModal>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Properties</h4>
+        <button type="button" class="btn-close" (click)="onCloseModal()" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-8">
+            <div class="card">
+              <div class="card-header">
+                Properties List
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <tr class="text-center">
+                      <th scope="col">Property Number</th>
+                      <th scope="col">Facing</th>
+                      <th scope="col">Total Area</th>
+                      <th scope="col">Rate</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="this.modalPropertyGridData && this.modalPropertyGridData.length !=0">
+                      @for (item of this.modalPropertyGridData; track $index) {
+                      <tr class="text-center">
+                        <td>{{item.propertyNo}}</td>
+                        <td>{{item.facing}}</td>
+                        <td>{{item.totalArea}}</td>
+                        <td>{{item.rate}}</td>
+                        <td>
+                          <button class="btn btn-warning btn-sm" (click)="onModalPropertyEdit(item)">Edit</button>
+                          <button style="margin: 5px;" class="btn btn-danger btn-sm"
+                            (click)="onModalPropertyDelete(item)">Delete</button>
+                        </td>
+                      </tr>
+                      }
+                    </ng-container>
+                    <ng-container>
+                      <tr class="text-center"
+                        *ngIf="this.modalPropertyGridData && this.modalPropertyGridData.length == 0">
+                        <td colspan="5">No Records found</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card">
+              <div class="card-header">
+                Property Details
+              </div>
+              <div class="card-body">
+                <form [formGroup]="modalPropertyForm">
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">Property Number</label>
+                        <input type="number" class="form-control" placeholder="Enter Property Number"
+                          formControlName="propertyNo">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">Facing</label>
+                        <input type="text" class="form-control" placeholder="Enter Facing" formControlName="facing">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="form-label">Total Area</label>
+                        <input type="text" class="form-control" placeholder="Enter Total Area"
+                          formControlName="totalArea">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label class="form-label">Rate</label>
+                        <input type="text" class="form-control" placeholder="Enter Rate(e.g: 5000 Per Sqft)"
+                          formControlName="rate">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-12">
+                      @if(modalPropertyForm.controls['propertyId'].value == 0){
+                      <button class="btn btn-primary" [disabled]="!this.modalPropertyForm.valid"
+                        (click)="onModalPropertySave()">Save</button>
+                      }@else {
+                      <button class="btn btn-warning" (click)="onModalPropertyUpdate()">Update</button>
+                      }
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="onCloseModal()" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
